@@ -9,6 +9,7 @@ import javax.persistence.Query;
 import models.Anuncio;
 import models.Estilo;
 import models.Instrumento;
+import play.Logger;
 import play.db.jpa.JPA;
 
 /**
@@ -89,6 +90,7 @@ public class GenericDAO {
 		List<Anuncio> list = findAllByClass(Anuncio.class);
 		for (int i = list.size()-1; i >= 0; i--) {
 			if(!list.get(i).getInstrumentos().containsAll(instrumentos)){
+				Logger.debug(list.get(i).getDescricao());
 				list.remove(i);
 			}
 		}
