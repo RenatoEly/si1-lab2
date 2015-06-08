@@ -56,6 +56,10 @@ public class GenericDAO {
      */
 	public <T> List<T> findAllByClass(Class clazz) {
 		String hql = "FROM " + clazz.getName();
+		if(clazz.equals(Anuncio.class)){
+			Logger.debug("passou");
+			hql += " ORDER BY 'datapublicacao' DESC";
+		}
 		Query hqlQuery = JPA.em().createQuery(hql);
 		return hqlQuery.getResultList();
 	}
@@ -90,7 +94,6 @@ public class GenericDAO {
 		List<Anuncio> list = findAllByClass(Anuncio.class);
 		for (int i = list.size()-1; i >= 0; i--) {
 			if(!list.get(i).getInstrumentos().containsAll(instrumentos)){
-				Logger.debug(list.get(i).getDescricao());
 				list.remove(i);
 			}
 		}
@@ -110,7 +113,8 @@ public class GenericDAO {
 	public List<Anuncio> findByPalavraChave(String palavra){
 		String hql = "FROM Anuncio c WHERE c.descricao LIKE '%"+ palavra + "%'";
 		Query hqlQuery = JPA.em().createQuery(hql);
-		return hqlQuery.getResultList();
+		List<Anuncio> anuncios = hqlQuery.getResultList();
+		return anuncios;
 	}
 	
 	public List<Anuncio> findAnuncio(List<Instrumento> instrumentos, List<Estilo> estilos, String palavra, String interesse){
@@ -118,7 +122,6 @@ public class GenericDAO {
 		List<Anuncio> listesti = findByEstilo(estilos);
 		List<Anuncio> listpal = findByPalavraChave(palavra);
 		List<Anuncio> listinte;
-		Set<Anuncio> lista = new LinkedHashSet<Anuncio>();
 		if(interesse != null){
 			Query hqlQuery = JPA.em().createQuery("FROM Anuncio c WHERE c.interesse = '"+ interesse + "'");
 			listinte = hqlQuery.getResultList();
@@ -126,12 +129,9 @@ public class GenericDAO {
 		else{
 			listinte = findAllByClass(Anuncio.class);
 		}
-		lista.addAll(listinst);
-		lista.addAll(listesti);
-		lista.addAll(listpal);
-		lista.addAll(listinte);
-		listinst.clear();
-		listinst.addAll(lista);
+		listinst.retainAll(listesti);
+		listinst.retainAll(listpal);
+		listinst.retainAll(listinte);
 		return listinst;
 	}
 

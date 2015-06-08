@@ -1,9 +1,12 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import models.Instrumento;
 import models.Estilo;
+import models.Anuncio;
 import models.dao.GenericDAO;
 import play.Application;
 import play.GlobalSettings;
@@ -24,6 +27,12 @@ public class Global extends GlobalSettings {
 			public void invoke() throws Throwable {
 				FileReader arq;
 				BufferedReader lerArq;
+				List<Instrumento> instrumentos = new ArrayList<>();
+				List<Estilo> estilosgosta = new ArrayList<>();
+				List<Estilo> estilosnaogosta = new ArrayList<>();
+				List<String> dados = new ArrayList<>();
+				Anuncio anuncio;
+				
 				
 				try { 
 					arq = new FileReader("dados/instrumentos.txt"); 
@@ -36,7 +45,7 @@ public class Global extends GlobalSettings {
 					} 
 					arq.close(); 
 				} catch (IOException e) { 
-					System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage()); 
+					System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
 				} 
 				dao.flush();
 				
@@ -54,6 +63,43 @@ public class Global extends GlobalSettings {
 					System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage()); 
 				} 
 				dao.flush();
+				
+				dados.add("Renato");
+				dados.add("Fortaleza");
+				dados.add("Mondubim");
+				dados.add("Super músico");
+				dados.add("Toco muito bem. Pode me chamar que eu vou!");
+				dados.add("Tocar em banda");
+				dados.add("renato@teste.com");
+				dados.add("renato@face.com");
+				instrumentos.add(dao.findByEntityId(Instrumento.class, (long) 1)); //Sanfona
+				instrumentos.add(dao.findByEntityId(Instrumento.class, (long) 6)); //Baixo
+				estilosgosta.add(dao.findByEntityId(Estilo.class, (long) 1)); //Axé
+				
+				anuncio = new Anuncio(dados, instrumentos, estilosgosta, estilosnaogosta);
+				dao.persist(anuncio);
+				dao.flush();
+				
+				dados.clear();
+				instrumentos.clear();
+				estilosgosta.clear();
+				dados.add("Fernando");
+				dados.add("Campina Grande");
+				dados.add("Catolé");
+				dados.add("Vem que vem!");
+				dados.add("Eai galera se vc ta procurando um cara pra sua banda pode parar de procurar pq vc achou!");
+				dados.add("Tocar em banda");
+				dados.add("fernando@teste.com");
+				dados.add("fernando@face.com");
+				instrumentos.add(dao.findByEntityId(Instrumento.class, (long) 115)); //Violão
+				instrumentos.add(dao.findByEntityId(Instrumento.class, (long) 6)); //Baixo
+				estilosgosta.add(dao.findByEntityId(Estilo.class, (long) 37)); //Pop/Rock
+				estilosnaogosta.add(dao.findByEntityId(Estilo.class, (long) 2)); //Baião
+				
+				anuncio = new Anuncio(dados, instrumentos, estilosgosta, estilosnaogosta);
+				dao.persist(anuncio);
+				dao.flush();
+				
 			}
 		});
 	}

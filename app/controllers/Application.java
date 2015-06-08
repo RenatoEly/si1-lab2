@@ -108,8 +108,6 @@ public class Application extends Controller {
 		if(palavrachave == null){
 			palavrachave = "";
 		}
-
-		Logger.debug(palavrachave);
 		
 		List<Anuncio> anuncios = dao.findAnuncio(instruments, estilosgosta, palavrachave, interesse);
 		return ok(views.html.index.render(anuncios,dao.findAllByClass(Estilo.class),dao.findAllByClass(Instrumento.class)));

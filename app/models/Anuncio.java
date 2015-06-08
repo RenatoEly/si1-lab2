@@ -10,7 +10,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
-import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -22,19 +21,19 @@ public class Anuncio {
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
 	private long id;
 	
-	@Column
+	@Column(nullable=false)
 	private String nome;
 	
-	@Column
+	@Column(nullable=false)
 	private String titulo;
 	
-	@Column
+	@Column(nullable=false)
 	private String descricao;
 	
-	@Column
+	@Column(nullable=false)
 	private String cidade;
 	
-	@Column
+	@Column(nullable=false)
 	private String bairro;
 	
 	@ManyToMany
@@ -49,7 +48,7 @@ public class Anuncio {
 	@JoinTable(name="naogosta")
 	private List<Estilo> naogosta;
 	
-	@Column
+	@Column(nullable=false)
 	private String interesse;
 	
 	@Column
@@ -58,7 +57,7 @@ public class Anuncio {
 	@Column
 	private String facebook;
 	
-	@Column
+	@Column(nullable=false)
 	@Temporal(value = TemporalType.TIMESTAMP)
 	private Date datapublicacao;
 	
