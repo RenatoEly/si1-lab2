@@ -1,6 +1,6 @@
 package models;
 
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -15,7 +15,9 @@ import javax.persistence.TemporalType;
 
 @Entity
 public class Anuncio {
-	private static final String[] DADOS = new String[]{"Nome","Cidade","Bairro","Título","Descrição","Interesse","Email","Facebook"};
+	private static final String[] DADOS = new String[]{"Nome","Cidade","Bairro","Título","Descrição","Interesse","Código","Email","Facebook"};
+	private static final String[] DIA = new String[]{"Dom","Seg","Ter","Qua","Qui","Sex","Sab"};
+	private static final String[] MES = new String[]{"Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"};
 	
 	@Id
 	@GeneratedValue(strategy= GenerationType.SEQUENCE)
@@ -57,21 +59,30 @@ public class Anuncio {
 	@Column
 	private String facebook;
 	
-	@Column(nullable=false)
+	@Column(name="datapublicacao")
 	@Temporal(value = TemporalType.TIMESTAMP)
-	private Date datapublicacao;
+	private Calendar datapublicacao;
+	
+	@Column
+	private String codigo;
+	
+	@Column
+	private boolean finalizado;
+	
+	@Column
+	private boolean sucesso;
 	
 	private Anuncio(){
 		
 	}
 	
 	public Anuncio(List<String> dados, List<Instrumento> instrumentos, List<Estilo> gosta, List<Estilo> naogosta){
-		for (int i = 0; i < 6; i++) {
+		for (int i = 0; i < 7; i++) {
 			if(dados.get(i) == null || dados.get(i).equals("")){
 				throw new IllegalArgumentException("O campo "+DADOS[i]+" não pode estar vazio!");
 			}
 		}
-		if(dados.get(6).equals("") || dados.get(7).equals("")){
+		if(dados.get(7).equals("") || dados.get(8).equals("")){
 			throw new IllegalArgumentException("Informe uma forma de contato!");
 		}
 		if(instrumentos.size() == 0){
@@ -83,12 +94,15 @@ public class Anuncio {
 		setTitulo(dados.get(3));
 		setDescricao(dados.get(4));
 		setInteresse(dados.get(5));
-		setEmail(dados.get(6));
-		setFacebook(dados.get(7));
+		setCodigo(dados.get(6));
+		setEmail(dados.get(7));
+		setFacebook(dados.get(8));
 		setInstrumentos(instrumentos);
 		setGosta(gosta);
 		setNaogosta(naogosta);
-		setDataPublicacao(new Date());
+		setDataPublicacao(Calendar.getInstance());
+		setFinalizado(false);
+		setSucesso(false);
 	}
 	
 	public String getTitulo() {
@@ -136,7 +150,7 @@ public class Anuncio {
 	}
 	
 	
-	private void setDataPublicacao(Date data){
+	private void setDataPublicacao(Calendar data){
 		this.datapublicacao = data;
 	}
 	
@@ -182,7 +196,15 @@ public class Anuncio {
 	
 	
 	public String getDataPublicacao(){
-		return datapublicacao.toString();
+		String data = "";
+		
+		data += DIA[datapublicacao.get(Calendar.DAY_OF_WEEK)-1];
+		data += ", " + datapublicacao.get(Calendar.DAY_OF_WEEK);
+		data += " " + MES[datapublicacao.get(Calendar.DAY_OF_WEEK)-1];
+		data += " " + datapublicacao.get(Calendar.YEAR);
+		data += " - " + datapublicacao.get(Calendar.HOUR_OF_DAY);
+		data += ":" + datapublicacao.get(Calendar.MINUTE);
+		return data;
 	}
 	
 	public String getNome(){
@@ -209,5 +231,29 @@ public class Anuncio {
 		if (id != other.id)
 			return false;
 		return true;
+	}
+
+	public String getCodigo() {
+		return codigo;
+	}
+
+	public void setCodigo(String codigo) {
+		this.codigo = codigo;
+	}
+
+	public boolean isFinalizado() {
+		return finalizado;
+	}
+
+	public void setFinalizado(boolean finalizado) {
+		this.finalizado = finalizado;
+	}
+
+	public boolean isSucesso() {
+		return sucesso;
+	}
+
+	public void setSucesso(boolean sucesso) {
+		this.sucesso = sucesso;
 	}
 }

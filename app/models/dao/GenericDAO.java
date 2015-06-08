@@ -57,8 +57,7 @@ public class GenericDAO {
 	public <T> List<T> findAllByClass(Class clazz) {
 		String hql = "FROM " + clazz.getName();
 		if(clazz.equals(Anuncio.class)){
-			Logger.debug("passou");
-			hql += " ORDER BY 'datapublicacao' DESC";
+			hql += " ORDER BY datapublicacao DESC";
 		}
 		Query hqlQuery = JPA.em().createQuery(hql);
 		return hqlQuery.getResultList();

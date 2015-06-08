@@ -27,9 +27,9 @@ public class Global extends GlobalSettings {
 			public void invoke() throws Throwable {
 				FileReader arq;
 				BufferedReader lerArq;
-				List<Instrumento> instrumentos = new ArrayList<>();
-				List<Estilo> estilosgosta = new ArrayList<>();
-				List<Estilo> estilosnaogosta = new ArrayList<>();
+				List<Instrumento> instrumentos = new ArrayList<Instrumento>();
+				List<Estilo> estilosgosta = new ArrayList<Estilo>();
+				List<Estilo> estilosnaogosta = new ArrayList<Estilo>();
 				List<String> dados = new ArrayList<>();
 				Anuncio anuncio;
 				
@@ -77,12 +77,15 @@ public class Global extends GlobalSettings {
 				estilosgosta.add(dao.findByEntityId(Estilo.class, (long) 1)); //Axé
 				
 				anuncio = new Anuncio(dados, instrumentos, estilosgosta, estilosnaogosta);
+				Logger.debug(instrumentos.get(0).getDescricao()+" - "+anuncio.getInstrumentos().get(0).getDescricao());
+				Logger.debug(estilosgosta.get(0).getDescricao()+" - "+anuncio.getGosta().get(0).getDescricao());
 				dao.persist(anuncio);
 				dao.flush();
 				
 				dados.clear();
-				instrumentos.clear();
-				estilosgosta.clear();
+				instrumentos = new ArrayList<Instrumento>();
+				estilosgosta = new ArrayList<Estilo>();
+				estilosnaogosta  = new ArrayList<Estilo>();
 				dados.add("Fernando");
 				dados.add("Campina Grande");
 				dados.add("Catolé");
@@ -97,6 +100,8 @@ public class Global extends GlobalSettings {
 				estilosnaogosta.add(dao.findByEntityId(Estilo.class, (long) 2)); //Baião
 				
 				anuncio = new Anuncio(dados, instrumentos, estilosgosta, estilosnaogosta);
+				Logger.debug(instrumentos.get(0).getDescricao()+" - "+anuncio.getInstrumentos().get(0).getDescricao());
+				Logger.debug(estilosgosta.get(0).getDescricao()+" - "+anuncio.getGosta().get(0).getDescricao());
 				dao.persist(anuncio);
 				dao.flush();
 				

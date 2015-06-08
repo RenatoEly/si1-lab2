@@ -72,7 +72,7 @@
                 <p class="lead">
                     by <a href="index.php">@anuncio.getNome()</a>
                 </p>
-                <p><span class="glyphicon glyphicon-time"></span> Posted , @anuncio.getDataPublicacao()</p>
+                <p><span class="glyphicon glyphicon-time"></span>  @anuncio.getDataPublicacao()</p>
                 <br>
                 <label>Descrição: </label>
                                 <p>@anuncio.getDescricao()</p>
@@ -101,7 +101,7 @@
                 	<label>Estilos que não gosta:</label>
                     <br>
                  <div>
-				@for(estilo <- anuncio.getGosta()){
+				@for(estilo <- anuncio.getNaogosta()){
                 <p>@estilo.getDescricao()</p>
                 }
                     </div>
