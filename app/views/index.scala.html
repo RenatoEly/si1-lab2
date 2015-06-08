@@ -148,13 +148,13 @@
                 <!-- Blog Search Well -->
                 <div class="well">
                     <h3>Buscar por:</h3>
-                    <form id="form1" name="form1" action="">
+                    <form id="form1" name="form1" action="@routes.Application.pesquisar()" method="get">
 	                    <label>Palavra chave:</label>
                         <input id="palavrachave" name="palavrachave" type="text" class="form-control"  disabled>
                         <input type="checkbox" id="searchpal" name="searchpal" onClick="capa();"><br>
                         
                         <label>Instrumento:</label>
-                        <select id="instrumento" name="instrumento" class="form-control" disabled multiple>
+                        <select id="instrumento" name="instrumento" class="form-control" multiple>
                         @for(instrumento <- instrumentos){
                         
                         <option value="@instrumento.getId()">@instrumento.getDescricao()</option>
@@ -163,10 +163,10 @@
                         <input type="checkbox" id="searchinst" name="searchinst" onClick="capa();"><br>
                         
                         <label>Estilo:</label>
-                        <select id="estilo" name="estilo" class="form-control" disabled multiple>
+                        <select id="estilo" name="estilo" class="form-control" multiple>
                         @for(estilo <- estilos){
                         
-                        <option value="@estilo.getId()">@instrumento.getDescricao()</option>
+                        <option value="@estilo.getId()">@estilo.getDescricao()</option>
                         }</select>
                         <input type="checkbox" id="searchest" name="searchest" onClick="capa();"><br>
                         

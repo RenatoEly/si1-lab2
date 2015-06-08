@@ -69,3 +69,32 @@ $("#estilo").multiSelect({
     this.qs2.cache();
   }
 });
+
+function capa(){
+	with(document.form1){
+		if($("#searchpal").is(':checked')){
+			palavrachave.disabled = false;
+		}
+		else{
+			$("#palavrachave").val("");
+			palavrachave.disabled = true;
+		}
+		if($("#searchinst").is(':checked')){
+			instrumento.disabled = false;
+		}
+		else{
+			instrumento.disabled = true;
+		}
+		if($("#searchest").is(':checked')){
+			estilo.disabled = false;
+		}
+		else{
+			estilo.disabled = true;
+		}
+		if($("#searchinter").is(':checked')){
+			interesse.disabled = false;
+		}
+		else{
+			interesse.disabled = true;
+		}
+}}

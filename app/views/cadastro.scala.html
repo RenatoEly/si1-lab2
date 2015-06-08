@@ -41,7 +41,7 @@
                     <span class="icon-bar"></span>
                     <span class="icon-bar"></span>
                 </button>
-                <a class="navbar-brand" href="#">Início</a>
+                <a class="navbar-brand" href="@routes.Application.index()">Início</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -156,19 +156,19 @@
     </select>
   </div>
 </div>
-               <select id='instrumentos' multiple name="instrumentos">
+               <select id="instrumentos" multiple name="instrumentos">
                @for(instrumento <- instrumentos){
   <option value='@instrumento.getId()' >@instrumento.getDescricao()</option>
   }
 </select>
 
-<select id='gosta' multiple name="gosta">
+<select id="gosta" multiple name="gosta">
                @for(estilo <- estilos){
   <option value='@estilo.getId()' >@estilo.getDescricao()</option>
   }
 </select>
 
-<select id='naogosta' multiple name="naogosta">
+<select id="naogosta" multiple name="naogosta">
                @for(estilo <- estilos){
   <option value='@estilo.getId()' >@estilo.getDescricao()</option>
   }
@@ -223,7 +223,7 @@
     
     
     
-<script src="@routes.Assets.at("javascripts/cadastrocript.js")"></script>
+<script src="@routes.Assets.at("javascripts/cadastroscript.js")"></script>
 </body>
 
 </html>

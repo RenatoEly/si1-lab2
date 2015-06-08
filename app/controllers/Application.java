@@ -90,8 +90,8 @@ public class Application extends Controller {
 		
 		DynamicForm filledForm = Form.form().bindFromRequest();
 		Map<String,String[]> map = request().body().asFormUrlEncoded();
-		String[] instrumentos = map.get("instrumentos");
-		String[] estilos = map.get("estilos");
+		String[] instrumentos = map.get("instrumento");
+		String[] estilos = map.get("estilo");
 		String palavrachave = filledForm.get("palavrachave");
 		String interesse = filledForm.get("interesse");
 		
@@ -109,6 +109,8 @@ public class Application extends Controller {
 			palavrachave = "";
 		}
 
+		Logger.debug(palavrachave);
+		
 		List<Anuncio> anuncios = dao.findAnuncio(instruments, estilosgosta, palavrachave, interesse);
 		return ok(views.html.index.render(anuncios,dao.findAllByClass(Estilo.class),dao.findAllByClass(Instrumento.class)));
 	}

@@ -156,7 +156,7 @@
     </select>
   </div>
 </div>
-               <select id='instrumentos' multiple='multiple' name="instrumentos">
+               <select id='instrumentos' multiple name="instrumentos">
                @for(instrumento <- instrumentos){
   <option value='@instrumento.getId()' >@instrumento.getDescricao()</option>
   }
