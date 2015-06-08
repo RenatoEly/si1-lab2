@@ -1,0 +1,123 @@
+Acordeão
+Afoxé
+Agogô
+Alaúde
+Atabaque
+Baixo
+Bandola
+Bandolim
+Bandoneon
+Batá
+Bateria
+Berimbau
+Bloco sonoro
+Bombarda
+Bombardão
+Bombardino
+Bongô
+Bugle
+Bumbo
+Caixa
+Carrilhão
+Casaca
+Castanhola
+Cavaquinho
+Caxixi
+Ceramofone
+Charamela
+Chimbau
+Chocalho
+Clarim
+Concertina
+Concertina hexagonal
+Conga
+Contrabaixo
+Contrafagote
+Cornamusa
+Corneta
+Cowbell
+Cravo
+Cuíca
+Darbuka
+Didjeridu
+Dobro
+Drums
+Duduk
+Dulciana
+Eufônio
+Fagote
+Feliscorne
+Flauta
+Flauta baixo
+Flauta de pan
+Flauta doce
+Flauta Irlandesa
+Flautim
+Fulannu
+Gaita
+Gaita de fole
+Ganzá
+Guitarra
+Guitarra Baiana
+Hardanger Fiddle
+Harmônio
+Hojok
+Kaval
+Marimba
+Melofone
+Ney
+Oboé
+Ocarina
+Oficleide
+Pandeiro
+Pennywistle
+Piano
+Pífaro
+Pife Brasileiro
+Pratos
+Quena
+Quinticlave
+Rabeca
+Rebab
+Rebolo
+Reco-reco
+Repinique
+Sacabuxa
+Sarrusofone
+Saxofone
+Saxotrompa
+Shakuhachi
+Shehnai
+Sheng
+Shofar
+Sino
+Sinos tubulares
+Suona
+Surdo
+Surnay
+Tambor
+Tamborim
+Tantã
+Teclado
+Tímpano
+Tom-tom
+Triângulo
+Trombone
+Trompa
+Trompa de postilhão
+Trompete
+Tuba
+Vibrafone
+Viola
+Viola caipira
+Viola de doze cordas
+Viola de gamba
+Violão
+Violão de 12 cordas
+Violão de 7 cordas
+Violino
+Violoncelo
+Xequerê
+Xilofone
+Zabumba
+Zampronha

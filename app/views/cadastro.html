@@ -1,0 +1,229 @@
+@(instrumentos : List[Instrumento],estilos : List[Estilo])
+
+<html lang="">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Band Mania</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="stylesheets/bootstrap.min.css" rel="stylesheet">
+	<link href="stylesheets/multi-select.css" media="screen" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link href="@routes.Assets.at("stylesheets/blog-home.css")" rel="stylesheet">
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body>
+
+    <!-- Navigation -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Início</a>
+            </div>
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#">Sobre</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container -->
+    </nav>
+
+    <!-- Page Content -->
+    <div class="container">
+
+        <div class="row">
+
+            <!-- Blog Entries Column -->
+            <div class="col-md-8">
+
+                <h1 class="page-header">
+                    Band Mania!
+                    <small>Encontre sua banda metade</small>
+                </h1>
+				<form action="@routes.Application.addAnuncio()" method="post">
+                
+                <!-- Text input-->
+<div class="control-group">
+  <label class="control-label" for="nome">Nome:</label>
+  <div class="controls">
+    <input id="nome" name="nome" type="text" placeholder="Nome" class="input-xlarge" required="">
+    
+  </div>
+</div>
+
+<!-- Text input-->
+<div class="row">
+<div class="col-md-4">
+<div class="control-group">
+  <label class="control-label" for="cidade">Cidade:</label>
+  <div class="controls">
+    <input id="cidade" name="cidade" type="text" placeholder="Cidade" class="input-xlarge" required="">
+    
+  </div>
+</div>
+</div>
+
+<div class="col-md-4">
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label" for="bairro">Bairro:</label>
+  <div class="controls">
+    <input id="bairro" name="bairro" type="text" placeholder="Bairro" class="input-xlarge" required="">
+    
+  </div>
+</div>
+</div>
+</div>
+
+<div class="row">
+<div class="col-md-4">
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label" for="facebook">Facebook:</label>
+  <div class="controls">
+    <input id="facebook" name="facebook" type="text" placeholder="facebook" class="input-xlarge">
+    
+  </div>
+</div>
+</div>
+
+<div class="col-md-1">
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label" for="email">Email:</label>
+  <div class="controls">
+    <input id="email" name="email" type="text" placeholder="email@@exemplo.com" class="input-xlarge">
+    
+  </div>
+</div>
+</div>
+</div>
+
+<br>
+
+<!-- Text input-->
+<div class="control-group">
+  <label class="control-label" for="titulo">Título do anúncio:</label>
+  <div class="controls">
+    <input id="titulo" name="titulo" type="text" placeholder="Título" class="input-xlarge" required="">
+    
+  </div>
+</div>
+
+<!-- Textarea -->
+<div class="control-group">
+  <label class="control-label" for="descricao">Descrição:</label>
+  <div class="controls">                     
+    <textarea id="descricao" name="descricao"></textarea>
+  </div>
+</div>
+
+<!-- Select Basic -->
+<div class="control-group">
+  <label class="control-label" for="intencao">Intenção:</label>
+  <div class="controls">
+    <select id="interesse" name="interesse" class="input-xlarge" disabled>
+      <option value="Tocar em banda">Tocar em banda</option>
+      <option value="Tocar ocasionalmente">Tocar ocasionalmente</option>
+    </select>
+  </div>
+</div>
+               <select id='instrumentos' multiple='multiple' name="instrumentos">
+               @for(instrumento <- instrumentos){
+  <option value='@instrumento.getId()' >@instrumento.getDescricao()</option>
+  }
+</select>
+
+<select id='gosta' multiple='multiple' name="gosta">
+               @for(estilo <- estilos){
+  <option value='@estilo.getId()' >@estilo.getDescricao()</option>
+  }
+</select>
+
+<select id='naogosta' multiple='multiple' name="naogosta">
+               @for(estilo <- estilos){
+  <option value='@estilo.getId()' >@estilo.getDescricao()</option>
+  }
+</select>
+<br>
+<input type="submit" value="Enviar">
+
+</form>
+
+                <hr>
+
+            </div>
+
+            <!-- Blog Sidebar Widgets Column -->
+            <div class="col-md-4">
+
+                <!-- Blog Search Well -->
+                <div class="well">
+                    
+                </div>
+
+            </div>
+
+        </div>
+        <!-- /.row -->
+
+        <hr>
+
+        <!-- Footer -->
+        <footer>
+            <div class="row">
+                <div class="col-lg-12">
+                    <p>Desenvolvido por Renato Ely</p>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+        </footer>
+
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src="javascripts/jquery.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="javascripts/bootstrap.min.js"></script>
+    
+    <script src="javascripts/jquery.multi-select.js"></script>
+    
+    <script src="javascripts/jquery.quicksearch.js"></script>
+    
+    
+    
+<script src="javascripts/cadastroscript.js"></script>
+</body>
+
+</html>
