@@ -83,7 +83,11 @@ public class GenericDAO {
 		return hqlQuery.getResultList();
 	}
 	
-	private List<Anuncio> findByInstrumento(List<Instrumento> instrumentos){
+	private Query createQuery(String query) {
+		return JPA.em().createQuery(query);
+	}
+	
+	private List<Anuncio> AnunciosByInstrumento(List<Instrumento> instrumentos){
 		List<Anuncio> list = getAnuncios();
 		for (int i = list.size()-1; i >= 0; i--) {
 			if(!list.get(i).getInstrumentos().containsAll(instrumentos)){
@@ -93,7 +97,7 @@ public class GenericDAO {
 		return list;
 	}
 	
-	private List<Anuncio> findByEstilo(List<Estilo> estilos){
+	private List<Anuncio> AnunciosByEstilo(List<Estilo> estilos){
 		List<Anuncio> list = getAnuncios();
 		for (int i = list.size()-1; i >= 0; i--) {
 			if(!list.get(i).getGosta().containsAll(estilos)){
@@ -103,24 +107,25 @@ public class GenericDAO {
 		return list;
 	}
 	
-	private List<Anuncio> findByPalavraChave(String palavra){
-		String hql = "FROM Anuncio c WHERE c.descricao LIKE '%"+ palavra + "%' AND finalizado = 'false'";
+	private List<Anuncio> AnunciosByPalavraChave(String palavra){
+		String hql = "FROM Anuncio c WHERE c.descricao LIKE '%"+ palavra + "%' OR titulo LIKE '%"+palavra+"%'"
+				+ "OR nome LIKE '%"+palavra+"%' AND finalizado = 'false'";
 		Query hqlQuery = JPA.em().createQuery(hql);
 		List<Anuncio> anuncios = hqlQuery.getResultList();
 		return anuncios;
 	}
 	
 	public List<Anuncio> findAnuncio(List<Instrumento> instrumentos, List<Estilo> estilos, String palavra, String interesse){
-		List<Anuncio> listinst = findByInstrumento(instrumentos);
-		List<Anuncio> listesti = findByEstilo(estilos);
-		List<Anuncio> listpal = findByPalavraChave(palavra);
+		List<Anuncio> listinst = AnunciosByInstrumento(instrumentos);
+		List<Anuncio> listesti = AnunciosByEstilo(estilos);
+		List<Anuncio> listpal = AnunciosByPalavraChave(palavra);
 		List<Anuncio> listinte;
 		if(interesse != null){
-			Query hqlQuery = JPA.em().createQuery("FROM Anuncio c WHERE c.interesse = '"+ interesse + "'");
+			Query hqlQuery = JPA.em().createQuery("FROM Anuncio c WHERE c.interesse = '"+ interesse + "' AND finalizado = 'false'");
 			listinte = hqlQuery.getResultList();
 		}
 		else{
-			listinte = findAllByClass(Anuncio.class);
+			listinte = getAnuncios();
 		}
 		listinst.retainAll(listesti);
 		listinst.retainAll(listpal);
@@ -134,19 +139,15 @@ public class GenericDAO {
 		return hqlQuery.getResultList();
 	}
 	
-	public void finalizarAnuncio(String id, String codigo, boolean sucesso){
-		Anuncio anuncio = (Anuncio) findByAttributeName("Anuncio", "id", id);
+	public void finalizarAnuncio(long id, String codigo, boolean sucesso){
+		Anuncio anuncio = (Anuncio) findByEntityId(Anuncio.class, id);
 		if(anuncio.getCodigo().equals(codigo)){
 			anuncio.setFinalizado(true);
 			anuncio.setSucesso(sucesso);
-			merge(anuncio);
+			persist(anuncio);
 		}
 		else{
 			throw new IllegalArgumentException("Codigo incorreto!");
 		}
-	}
-
-	private Query createQuery(String query) {
-		return JPA.em().createQuery(query);
 	}
 }

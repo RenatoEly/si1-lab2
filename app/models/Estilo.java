@@ -12,7 +12,7 @@ public class Estilo {
 	@Column
 	private String descricao;
 
-	protected Estilo(){
+	private Estilo(){
 		
 	}
 	

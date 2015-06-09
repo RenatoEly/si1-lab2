@@ -7,7 +7,7 @@ GET     /                           controllers.Application.index()
 GET     /anuncio                  controllers.Application.anuncio()
 POST     /addAnuncio				controllers.Application.addAnuncio()
 POST		/pesquisar					controllers.Application.pesquisar()
-GET		/finaliza					controllers.Application.finaliza()
+GET		/finaliza					controllers.Application.finaliza(id: Long)
 POST	/finalizarAnuncio			controllers.Application.finalizarAnuncio()
 
 # Map static resources from the /public folder to the /assets URL path
