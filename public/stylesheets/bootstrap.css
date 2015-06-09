@@ -6581,4 +6581,9 @@ button.close {
     display: none !important;
   }
 }
+#descricao{
+	width: 600px; 
+	height: 150px; 
+	resize: none;
+}
 /*# sourceMappingURL=bootstrap.css.map */

@@ -20,7 +20,7 @@ public class Anuncio {
 	private static final String[] MES = new String[]{"Jan","Fev","Mar","Abr","Mai","Jun","Jul","Ago","Set","Out","Nov","Dez"};
 	
 	@Id
-	@GeneratedValue(strategy= GenerationType.SEQUENCE)
+	@GeneratedValue
 	private long id;
 	
 	@Column(nullable=false)
@@ -76,14 +76,15 @@ public class Anuncio {
 		
 	}
 	
-	public Anuncio(List<String> dados, List<Instrumento> instrumentos, List<Estilo> gosta, List<Estilo> naogosta){
+	public Anuncio(Dados dado, List<Instrumento> instrumentos, List<Estilo> gosta, List<Estilo> naogosta){
+		List<String> dados = dado.getDados();
 		for (int i = 0; i < 7; i++) {
 			if(dados.get(i) == null || dados.get(i).equals("")){
 				throw new IllegalArgumentException("O campo "+DADOS[i]+" não pode estar vazio!");
 			}
 		}
-		if(dados.get(7).equals("") || dados.get(8).equals("")){
-			throw new IllegalArgumentException("Informe uma forma de contato!");
+		if(dados.get(7) == null && dados.get(8) == null || dados.get(7).equals("") && dados.get(8).equals("")){
+			throw new IllegalArgumentException("Informe ao menos uma forma de contato!");
 		}
 		if(instrumentos.size() == 0){
 			throw new IllegalArgumentException("Você deve informar ao menos um instrumento!");
@@ -150,7 +151,7 @@ public class Anuncio {
 	}
 	
 	
-	private void setDataPublicacao(Calendar data){
+	public void setDataPublicacao(Calendar data){
 		this.datapublicacao = data;
 	}
 	
@@ -237,7 +238,7 @@ public class Anuncio {
 		return codigo;
 	}
 
-	public void setCodigo(String codigo) {
+	private void setCodigo(String codigo) {
 		this.codigo = codigo;
 	}
 

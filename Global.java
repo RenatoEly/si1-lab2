@@ -2,8 +2,12 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Random;
+import java.util.Set;
 
+import models.Dados;
 import models.Instrumento;
 import models.Estilo;
 import models.Anuncio;
@@ -18,7 +22,10 @@ public class Global extends GlobalSettings {
 	private static GenericDAO dao = new GenericDAO();
 	private static Instrumento instrumento;
 	private static Estilo estilo;
-	
+	private static final String[] interesse = new String[]{"Tocar em banda","Tocar ocasionalmente"};
+	private static final int TOTAL_ANUNCIOS = 40;
+	private static final int ANUNCIOS_FINALIZADOS = 15;
+
 	@Override
 	public void onStart(Application app) {
 		Logger.info("Aplicação inicializada...");
@@ -27,13 +34,16 @@ public class Global extends GlobalSettings {
 			public void invoke() throws Throwable {
 				FileReader arq;
 				BufferedReader lerArq;
-				List<Instrumento> instrumentos = new ArrayList<Instrumento>();
-				List<Estilo> estilosgosta = new ArrayList<Estilo>();
-				List<Estilo> estilosnaogosta = new ArrayList<Estilo>();
-				List<String> dados = new ArrayList<>();
+				Set<Instrumento> x = new LinkedHashSet<Instrumento>();
+				Set<Estilo> y = new LinkedHashSet<Estilo>();
+				List<Instrumento> instrumentos;
+				List<Estilo> estilosgosta;
+				List<Estilo> estilosnaogosta;
+				Dados dados = new Dados();
+				Random r = new Random();
 				Anuncio anuncio;
-				
-				
+
+
 				try { 
 					arq = new FileReader("dados/instrumentos.txt"); 
 					lerArq = new BufferedReader(arq);
@@ -48,7 +58,7 @@ public class Global extends GlobalSettings {
 					System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage());
 				} 
 				dao.flush();
-				
+
 				try { 
 					arq = new FileReader("dados/estilos.txt"); 
 					lerArq = new BufferedReader(arq);
@@ -63,48 +73,53 @@ public class Global extends GlobalSettings {
 					System.err.printf("Erro na abertura do arquivo: %s.\n", e.getMessage()); 
 				} 
 				dao.flush();
-				
-				dados.add("Renato");
-				dados.add("Fortaleza");
-				dados.add("Mondubim");
-				dados.add("Super músico");
-				dados.add("Toco muito bem. Pode me chamar que eu vou!");
-				dados.add("Tocar em banda");
-				dados.add("renato@teste.com");
-				dados.add("renato@face.com");
-				instrumentos.add(dao.findByEntityId(Instrumento.class, (long) 1)); //Sanfona
-				instrumentos.add(dao.findByEntityId(Instrumento.class, (long) 6)); //Baixo
-				estilosgosta.add(dao.findByEntityId(Estilo.class, (long) 1)); //Axé
-				
-				anuncio = new Anuncio(dados, instrumentos, estilosgosta, estilosnaogosta);
-				Logger.debug(instrumentos.get(0).getDescricao()+" - "+anuncio.getInstrumentos().get(0).getDescricao());
-				Logger.debug(estilosgosta.get(0).getDescricao()+" - "+anuncio.getGosta().get(0).getDescricao());
-				dao.persist(anuncio);
+
+				for(int i = 1; i <= TOTAL_ANUNCIOS; i++){
+					int aleatorio;
+					dados.setNome("Usuário "+i);
+					dados.setBairro("Bairro "+i);
+					dados.setCidade("Cidade "+i);
+					dados.setCodigo("aab"+i);
+					dados.setDescricao("Anuncio automático "+i);
+					dados.setEmail("email"+i+"@teste.com");
+					dados.setFacebook("anuncio"+i+"@face.com");
+					dados.setInteresse(interesse[i%2]);
+					dados.setTitulo("Título anuncio "+i);
+
+					aleatorio = r.nextInt(3) + 1;
+					for(int j = 0; j < aleatorio; j++){
+						x.add(dao.findByEntityId(Instrumento.class, (long) r.nextInt(123)+1));
+					}
+					instrumentos = new ArrayList<Instrumento>(x);
+					x.clear();
+
+					aleatorio = r.nextInt(4);
+					for(int k = 0; k < aleatorio; k++){
+						y.add(dao.findByEntityId(Estilo.class, (long) r.nextInt(63)+1));
+					}
+					estilosgosta= new ArrayList<Estilo>(y);
+					y.clear();
+
+					aleatorio = r.nextInt(4);
+					for(int l = 0; l < aleatorio; l++){
+						y.add(dao.findByEntityId(Estilo.class, (long) r.nextInt(63)+1));
+					}
+					estilosnaogosta = new ArrayList<Estilo>(y);
+					estilosnaogosta.removeAll(estilosgosta);
+					y.clear();
+					
+					anuncio = new Anuncio(dados,instrumentos,estilosgosta,estilosnaogosta);
+					dao.persist(anuncio);
+				}
 				dao.flush();
 				
-				dados.clear();
-				instrumentos = new ArrayList<Instrumento>();
-				estilosgosta = new ArrayList<Estilo>();
-				estilosnaogosta  = new ArrayList<Estilo>();
-				dados.add("Fernando");
-				dados.add("Campina Grande");
-				dados.add("Catolé");
-				dados.add("Vem que vem!");
-				dados.add("Eai galera se vc ta procurando um cara pra sua banda pode parar de procurar pq vc achou!");
-				dados.add("Tocar em banda");
-				dados.add("fernando@teste.com");
-				dados.add("fernando@face.com");
-				instrumentos.add(dao.findByEntityId(Instrumento.class, (long) 115)); //Violão
-				instrumentos.add(dao.findByEntityId(Instrumento.class, (long) 6)); //Baixo
-				estilosgosta.add(dao.findByEntityId(Estilo.class, (long) 37)); //Pop/Rock
-				estilosnaogosta.add(dao.findByEntityId(Estilo.class, (long) 2)); //Baião
-				
-				anuncio = new Anuncio(dados, instrumentos, estilosgosta, estilosnaogosta);
-				Logger.debug(instrumentos.get(0).getDescricao()+" - "+anuncio.getInstrumentos().get(0).getDescricao());
-				Logger.debug(estilosgosta.get(0).getDescricao()+" - "+anuncio.getGosta().get(0).getDescricao());
-				dao.persist(anuncio);
-				dao.flush();
-				
+				for (int z = 1; z <= ANUNCIOS_FINALIZADOS ; z++) {
+					Logger.debug(String.valueOf(z));
+					anuncio = dao.findByEntityId(Anuncio.class, (long) z);
+					anuncio.setFinalizado(true);
+					anuncio.setSucesso(true);
+					dao.merge(anuncio);
+				}
 			}
 		});
 	}

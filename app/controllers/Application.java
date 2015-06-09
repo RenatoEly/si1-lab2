@@ -5,27 +5,25 @@ import java.util.List;
 import java.util.Map;
 
 import models.Anuncio;
+import models.Dados;
 import models.Estilo;
 import models.Instrumento;
 import models.dao.GenericDAO;
-import play.Logger;
 import play.data.DynamicForm;
 import play.data.Form;
 import play.db.jpa.Transactional;
 import play.mvc.Controller;
 import play.mvc.Result;
-import scala.Array;
 
 public class Application extends Controller {
 	private static final GenericDAO dao = new GenericDAO();
 	private static List<Instrumento> instruments;
 	private static List<Estilo> estilosgosta;
 	private static List<Estilo> estilosnaogosta;
-	private static List<String> dados;
 
 	@Transactional
 	public static Result index() {
-		List<Anuncio> anuncios = dao.findAllByClass(Anuncio.class);
+		List<Anuncio> anuncios = dao.getAnuncios();
 		List<Estilo> estilos = dao.findAllByClass(Estilo.class);
 		List<Instrumento> instrumentos = dao.findAllByClass(Instrumento.class);
 		return ok(views.html.index.render(anuncios,estilos,instrumentos));
@@ -36,7 +34,11 @@ public class Application extends Controller {
 		instruments = new ArrayList<Instrumento>();
 		estilosgosta = new ArrayList<Estilo>();
 		estilosnaogosta = new ArrayList<Estilo>();
-		dados = new ArrayList<String>();
+
+        Form<Dados> oForm = Form.form(Dados.class);
+        Dados dados = oForm.bindFromRequest().get();
+		
+        
 		DynamicForm filledForm = Form.form().bindFromRequest();
 		Map<String,String[]> map = request().body().asFormUrlEncoded();
 		String[] instrumentos = map.get("instrumentos");
@@ -57,14 +59,6 @@ public class Application extends Controller {
 				estilosnaogosta.add(dao.findByEntityId(Estilo.class, Long.parseLong(string)));
 			}
 		}
-		dados.add(filledForm.get("nome"));
-		dados.add(filledForm.get("cidade"));
-		dados.add(filledForm.get("bairro"));
-		dados.add(filledForm.get("titulo"));
-		dados.add(filledForm.get("descricao"));
-		dados.add(filledForm.get("interesse"));
-		dados.add(filledForm.get("email"));
-		dados.add(filledForm.get("facebook"));
 		
 		try{
 			Anuncio newanuncio = new Anuncio(dados, instruments, estilosgosta, estilosnaogosta);
@@ -111,5 +105,25 @@ public class Application extends Controller {
 		
 		List<Anuncio> anuncios = dao.findAnuncio(instruments, estilosgosta, palavrachave, interesse);
 		return ok(views.html.index.render(anuncios,dao.findAllByClass(Estilo.class),dao.findAllByClass(Instrumento.class)));
+	}
+	
+	public static Result finaliza(){
+		return ok(views.html.finaliza.render());
+	}
+	
+	@Transactional
+	public static Result finalizarAnuncio(){
+		DynamicForm filledForm = Form.form().bindFromRequest();
+		String idanuncio = filledForm.get("id");
+		String codigo = filledForm.get("codigo");
+		boolean isSucesso = Boolean.parseBoolean(filledForm.get("sucesso"));
+		
+		try{
+			dao.finalizarAnuncio(idanuncio,codigo,isSucesso);
+		}catch(IllegalArgumentException e){
+			return badRequest(views.html.finaliza.render());
+		}
+
+		return redirect(routes.Application.index());
 	}
 }
