@@ -195,9 +195,6 @@ public class Anuncio {
 		return facebook;
 	}
 	
-	public long getId(){
-		return id;
-	}
 	
 	public String getDataPublicacao(){
 		String data = "";

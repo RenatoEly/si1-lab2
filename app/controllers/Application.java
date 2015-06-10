@@ -17,7 +17,7 @@ import play.mvc.Result;
 
 public class Application extends Controller {
 	private static final GenericDAO dao = new GenericDAO();
-	private static List<Instrumento> instrumentos;
+	private static List<Instrumento> instruments;
 	private static List<Estilo> estilosgosta;
 	private static List<Estilo> estilosnaogosta;
 
@@ -26,42 +26,42 @@ public class Application extends Controller {
 		List<Anuncio> anuncios = dao.getAnuncios();
 		List<Estilo> estilos = dao.findAllByClass(Estilo.class);
 		List<Instrumento> instrumentos = dao.findAllByClass(Instrumento.class);
-		
-		return ok(views.html.index.render());
+		return ok(views.html.index.render(anuncios,estilos,instrumentos));
 	}
 
 	@Transactional
 	public static Result addAnuncio(){
-		instrumentos = new ArrayList<Instrumento>();
+		instruments = new ArrayList<Instrumento>();
 		estilosgosta = new ArrayList<Estilo>();
 		estilosnaogosta = new ArrayList<Estilo>();
 
         Form<Dados> oForm = Form.form(Dados.class);
         Dados dados = oForm.bindFromRequest().get();
-        
-		Map<String,String[]> map = request().body().asFormUrlEncoded();
-		String[] idinstrumentos = map.get("instrumentos");
-		String[] idestilosgosta = map.get("gosta");
-		String[] idestilosnaogosta = map.get("naogosta");
 		
-		if(idinstrumentos != null){
-			for (String id : idinstrumentos) {
-				instrumentos.add(dao.findByEntityId(Instrumento.class, Long.parseLong(id)));
+        
+		DynamicForm filledForm = Form.form().bindFromRequest();
+		Map<String,String[]> map = request().body().asFormUrlEncoded();
+		String[] instrumentos = map.get("instrumentos");
+		String[] gosta = map.get("gosta");
+		String[] naogosta = map.get("naogosta");
+		if(instrumentos != null){
+			for (String string : instrumentos) {
+				instruments.add(dao.findByEntityId(Instrumento.class, Long.parseLong(string)));
 			}
 		}
-		if(idestilosgosta != null){
-			for (String id : idestilosgosta) {
-				estilosgosta.add(dao.findByEntityId(Estilo.class, Long.parseLong(id)));
+		if(gosta != null){
+			for (String string : gosta) {
+				estilosgosta.add(dao.findByEntityId(Estilo.class, Long.parseLong(string)));
 			}
 		}
-		if(idestilosnaogosta != null){
-			for (String id : idestilosnaogosta) {
-				estilosnaogosta.add(dao.findByEntityId(Estilo.class, Long.parseLong(id)));
+		if(naogosta != null){
+			for (String string : naogosta) {
+				estilosnaogosta.add(dao.findByEntityId(Estilo.class, Long.parseLong(string)));
 			}
 		}
 		
 		try{
-			Anuncio newanuncio = new Anuncio(dados, instrumentos, estilosgosta, estilosnaogosta);
+			Anuncio newanuncio = new Anuncio(dados, instruments, estilosgosta, estilosnaogosta);
 			dao.persist(newanuncio);
 		} catch(IllegalArgumentException e){
 			//TODO colocar mensagem na tela
@@ -79,53 +79,51 @@ public class Application extends Controller {
 	
 	@Transactional
 	public static Result pesquisar(){
-		instrumentos = new ArrayList<Instrumento>();
+		instruments = new ArrayList<Instrumento>();
 		estilosgosta = new ArrayList<Estilo>();
 		
 		DynamicForm filledForm = Form.form().bindFromRequest();
 		Map<String,String[]> map = request().body().asFormUrlEncoded();
-		String[] idinstrumentos = map.get("instrumento");
-		String[] idestilosgosta = map.get("estilo");
+		String[] instrumentos = map.get("instrumento");
+		String[] estilos = map.get("estilo");
 		String palavrachave = filledForm.get("palavrachave");
 		String interesse = filledForm.get("interesse");
 		
-		if(idinstrumentos != null){
-			for (String id : idinstrumentos) {
-				instrumentos.add(dao.findByEntityId(Instrumento.class, Long.parseLong(id)));
+		if(instrumentos != null){
+			for (String string : instrumentos) {
+				instruments.add(dao.findByEntityId(Instrumento.class, Long.parseLong(string)));
 			}
 		}
-		if(idestilosgosta != null){
-			for (String id : idestilosgosta) {
-				estilosgosta.add(dao.findByEntityId(Estilo.class, Long.parseLong(id)));
+		if(estilos != null){
+			for (String string : estilos) {
+				estilosgosta.add(dao.findByEntityId(Estilo.class, Long.parseLong(string)));
 			}
 		}
 		if(palavrachave == null){
 			palavrachave = "";
 		}
 		
-		List<Anuncio> anuncios = dao.findAnuncio(instrumentos, estilosgosta, palavrachave, interesse);
+		List<Anuncio> anuncios = dao.findAnuncio(instruments, estilosgosta, palavrachave, interesse);
 		return ok(views.html.index.render(anuncios,dao.findAllByClass(Estilo.class),dao.findAllByClass(Instrumento.class)));
 	}
 	
-	@Transactional
-	public static Result finaliza(Long id){
-		Anuncio anuncio = dao.findByEntityId(Anuncio.class, id.longValue());
-		return ok(views.html.finaliza.render(anuncio));
+	public static Result finaliza(){
+		return ok(views.html.finaliza.render());
 	}
 	
 	@Transactional
 	public static Result finalizarAnuncio(){
 		DynamicForm filledForm = Form.form().bindFromRequest();
-		long idanuncio = Long.parseLong(filledForm.get("id"));
+		String idanuncio = filledForm.get("id");
 		String codigo = filledForm.get("codigo");
 		boolean isSucesso = Boolean.parseBoolean(filledForm.get("sucesso"));
 		
 		try{
 			dao.finalizarAnuncio(idanuncio,codigo,isSucesso);
 		}catch(IllegalArgumentException e){
-			//TODO fazer aparecer mensagem na tela
-			return badRequest(views.html.finaliza.render(dao.findByEntityId(Anuncio.class, idanuncio)));
+			return badRequest(views.html.finaliza.render());
 		}
+
 		return redirect(routes.Application.index());
 	}
 }
